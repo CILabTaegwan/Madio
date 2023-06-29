@@ -106,4 +106,7 @@ coverage.xml
 
 *.vsconfig
 
-Package
+Packages
+Library
+Logs
+Temp
