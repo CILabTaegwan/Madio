@@ -102,6 +102,14 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // Debug.Log("dB Level: " + dbLevel);
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.Instance.ResetGame();
+            return;
+        }
+
+
+
 
         if (Time.frameCount % (int)(2f / Time.deltaTime) == 0) prevPos = transform.position;
 
@@ -113,6 +121,7 @@ public class PlayerMovement : MonoBehaviour
         {
             GroundedMovement();
         }
+
 
         ApplyGravity();
     }

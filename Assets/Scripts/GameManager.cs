@@ -49,8 +49,6 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        // TODO: show game over screen
-
         NewGame();
     }
 
@@ -89,6 +87,13 @@ public class GameManager : MonoBehaviour
         {
             deathSound.Play();
         }
+    }
+
+    public void ResetGame()
+    {
+        lives = 3;
+        coins = 0;
+        NewGame();
     }
 
     public void OnCleared()
