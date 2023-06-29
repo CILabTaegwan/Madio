@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
         if (Microphone.IsRecording(microphoneDevice))
         {
             // Play the recorded audio to analyze the dB levels
-            audioSource.Play();
+            // audioSource.Play();
         }
         else
         {

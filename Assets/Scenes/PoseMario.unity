@@ -12976,7 +12976,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 754f40cd7cac540949ebe4e7a6a56d7f, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -13372,7 +13372,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1863881397}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &1863881400
 Camera:
   m_ObjectHideFlags: 0
