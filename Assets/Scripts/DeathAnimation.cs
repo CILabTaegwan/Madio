@@ -20,6 +20,7 @@ public class DeathAnimation : MonoBehaviour
 
     private void OnDisable()
     {
+        EnablePhysics();
         StopAllCoroutines();
     }
 
@@ -30,6 +31,31 @@ public class DeathAnimation : MonoBehaviour
 
         if (deadSprite != null) {
             spriteRenderer.sprite = deadSprite;
+        }
+    }
+
+    private void EnablePhysics()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+
+        foreach (Collider2D collider in colliders)
+        {
+            collider.enabled = true;
+        }
+
+        GetComponent<Rigidbody2D>().isKinematic = false;
+
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+        EntityMovement entityMovement = GetComponent<EntityMovement>();
+
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = true;
+        }
+
+        if (entityMovement != null)
+        {
+            entityMovement.enabled = true;
         }
     }
 
