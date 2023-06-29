@@ -1,7 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using Mediapipe.Unity.PoseTracking;
 using System.Diagnostics;
-using Debug = UnityEngine.Debug;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -14,18 +14,19 @@ public class PlayerMovement : MonoBehaviour
     private float inputAxis;
     
     private Stopwatch stopwatch;
-    private float dbBound;
-    private float dbMaxOffset = 40f;
+    public float dbBound = 10f;
+    public float dbMaxOffset = 40f;
 
     public float moveSpeed = 8f;
     public float maxJumpHeight = 5f;
     public float maxJumpTime = 1f;
+    public float jumpOffset = 15f;
     public float jumpForce => (2f * maxJumpHeight) / (maxJumpTime / 2f);
     public float gravity => (-2f * maxJumpHeight) / Mathf.Pow(maxJumpTime / 2f, 2f);
 
     public bool grounded { get; private set; }
     public bool jumping { get; private set; }
-    public bool yelling { get; private set; }
+    public int  yelling = 0;
     public bool running => Mathf.Abs(velocity.x) > 0.25f || Mathf.Abs(inputAxis) > 0.25f;
     public bool sliding => (inputAxis > 0f && velocity.x < 0f) || (inputAxis < 0f && velocity.x > 0f);
     public bool falling => velocity.y < 0f && !grounded;
@@ -88,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
         collider.enabled = true;
         velocity = Vector2.zero;
         jumping = false;
-        yelling = false;
+        yelling = 0;
     }
 
     private void OnDisable()
@@ -97,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
         collider.enabled = false;
         velocity = Vector2.zero;
         jumping = false;
-        yelling = false;
+        yelling = 0;
     }
 
     private void Update()
@@ -173,35 +174,34 @@ public class PlayerMovement : MonoBehaviour
 
     private void GroundedMovement()
     {
-        float dbLevel = 0.0f;
-
-        float _dbLevel = GetDBLevel();
-        UIManager.Instance?.UpdateDecibelUI(_dbLevel, dbBound, dbBound + dbMaxOffset);
+        float dbLevel = GetDBLevel();
+        UIManager.Instance?.UpdateDecibelUI(dbLevel, dbBound, dbBound + dbMaxOffset);
         
-        if (stopwatch.ElapsedMilliseconds > 1500)
-        {
-            dbLevel = _dbLevel;
-            yelling = false;
-        }
         // prevent gravity from infinitly building up
         velocity.y = Mathf.Max(velocity.y, 0f);
-
 
         jumping = velocity.y > 0f;
         if (Input.GetKey(KeyCode.Z)) { jumping = true; }
         // perform jump
-        if (dbLevel > dbBound + 10.0f && !yelling)
+        if (dbLevel > dbBound + jumpOffset && yelling <= 0)
         {
+            yelling = 1;
             velocity.y = dbLevel;
             jumping = true;
-            yelling = true;
             stopwatch.Restart();
+            StartCoroutine(Yelling());
         }
         else if (Input.GetButtonDown("Jump"))
         {
             velocity.y = jumpForce;
             jumping = true;
         }
+    }
+
+    IEnumerator Yelling()
+    {
+        yield return new WaitForSeconds(1.2f);
+        yelling = 0;
     }
 
     private void ApplyGravity()
