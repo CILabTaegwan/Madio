@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class GameManager : MonoBehaviour
 
     public AudioSource deathSound;
 
+    //UI variables
+    public Text livesText;
+    public Text coinsText;
     private void Awake()
     {
         if (Instance != null) {
@@ -73,7 +77,7 @@ public class GameManager : MonoBehaviour
     public void ResetLevel()
     {
         lives--;
-
+        //livesText.text = lives.ToString();
         if (lives > 0) {
             LoadLevel(world, stage);
         } else {
@@ -93,7 +97,7 @@ public class GameManager : MonoBehaviour
     public void AddCoin()
     {
         coins++;
-
+        //coinsText.text = coins.ToString();
         if (coins == 100)
         {
             coins = 0;

@@ -166,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
         // prevent gravity from infinitly building up
         velocity.y = Mathf.Max(velocity.y, 0f);
         jumping = velocity.y > 0f;
-
+        if (Input.GetKey(KeyCode.Z)) { jumping = true; }
         // perform jump
         if (dbLevel > dbBound + 10.0f && !yelling)
         {
