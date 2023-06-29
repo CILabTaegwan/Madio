@@ -36,6 +36,9 @@ public class PlayerMovement : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private Vector2 initPos;
+    private Vector2 prevPos;
+
     private void Awake()
     {
         stopwatch = Stopwatch.StartNew();
@@ -73,6 +76,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         dbBound = GetDBLevel();
+
+        initPos = transform.position;
+        prevPos = initPos;
     }
 
     private void OnEnable()
@@ -96,7 +102,9 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // Debug.Log("dB Level: " + dbLevel);
-        
+
+        if (Time.frameCount % (int)(2f / Time.deltaTime) == 0) prevPos = transform.position;
+
         HorizontalMovement();
 
         grounded = rigidbody.Raycast(Vector2.down);
@@ -176,10 +184,10 @@ public class PlayerMovement : MonoBehaviour
             yelling = true;
             stopwatch.Restart();
         }
-
-        if (Input.GetKey(KeyCode.Space))
+        else if (Input.GetButtonDown("Jump"))
         {
-            velocity.y = 20.0f;
+            velocity.y = jumpForce;
+            jumping = true;
         }
     }
 
@@ -244,5 +252,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return highestDBLevel;
+    }
+
+    public void Reset()
+    {
+        transform.position = initPos;
+        GetComponent<Player>().Reset();
+    }
+
+    public void Resque()
+    {
+        transform.position = prevPos;
+        GetComponent<Player>().Reset();
     }
 }

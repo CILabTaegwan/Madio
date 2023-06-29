@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     public AudioSource deathSound;
 
+    private PlayerMovement player;
+
     private void Awake()
     {
         if (Instance != null) {
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 60;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
 
         NewGame();
     }
@@ -40,8 +43,7 @@ public class GameManager : MonoBehaviour
     {
         lives = 3;
         coins = 0;
-
-        LoadLevel(1, 1);
+        player.Reset();
     }
 
     public void GameOver()
@@ -56,7 +58,7 @@ public class GameManager : MonoBehaviour
         this.world = world;
         this.stage = stage;
 
-        // SceneManager.LoadScene($"{world}-{stage}");
+        SceneManager.LoadScene($"{world}-{stage}");
     }
 
     public void NextLevel()
@@ -74,8 +76,10 @@ public class GameManager : MonoBehaviour
     {
         lives--;
 
+        player.gameObject.SetActive(true);
+
         if (lives > 0) {
-            LoadLevel(world, stage);
+            player.Resque();
         } else {
             GameOver();
         }
@@ -84,9 +88,6 @@ public class GameManager : MonoBehaviour
         {
             deathSound.Play();
         }
-
-
-
     }
 
     public void AddCoin()
