@@ -92,7 +92,7 @@ namespace Mediapipe.Unity.PoseTracking
                     {
 
 
-                        if (Mathf.Abs(angle[2]) < 0.04)
+                        if (Mathf.Abs(angle[2]) < 0.01)
                         {
                             tmp_decision_forward *= 0;
                         }

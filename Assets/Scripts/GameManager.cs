@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
-        lives = 3;
+        lives = 7;
         coins = 0;
         player.Reset();
     }
