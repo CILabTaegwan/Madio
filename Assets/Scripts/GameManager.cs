@@ -67,6 +67,10 @@ public class GameManager : MonoBehaviour
 
     public void ResetLevel(float delay)
     {
+        if (deathSound != null)
+        {
+            deathSound.Play();
+        }
 
         Invoke(nameof(ResetLevel), delay);
     }
@@ -81,11 +85,6 @@ public class GameManager : MonoBehaviour
             player.Resque();
         } else {
             GameOver();
-        }
-
-        if (deathSound != null)
-        {
-            deathSound.Play();
         }
     }
 
