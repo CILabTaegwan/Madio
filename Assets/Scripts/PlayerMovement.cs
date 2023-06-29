@@ -174,8 +174,10 @@ public class PlayerMovement : MonoBehaviour
     private void GroundedMovement()
     {
         float dbLevel = 0.0f;
+
         float _dbLevel = GetDBLevel();
         UIManager.Instance?.UpdateDecibelUI(_dbLevel, dbBound, dbBound + dbMaxOffset);
+        
         if (stopwatch.ElapsedMilliseconds > 1500)
         {
             dbLevel = _dbLevel;
