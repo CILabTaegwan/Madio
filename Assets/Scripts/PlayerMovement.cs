@@ -183,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
 
 
         jumping = velocity.y > 0f;
-
+        if (Input.GetKey(KeyCode.Z)) { jumping = true; }
         // perform jump
         if (dbLevel > dbBound + 10.0f && !yelling)
         {
