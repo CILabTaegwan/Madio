@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public int coins { get; private set; }
 
     public AudioSource deathSound;
+    public AudioSource clearSound;
 
     private PlayerMovement player;
 
@@ -87,6 +88,14 @@ public class GameManager : MonoBehaviour
         if (deathSound != null)
         {
             deathSound.Play();
+        }
+    }
+
+    public void OnCleared()
+    {
+        if (clearSound != null)
+        {
+            clearSound.Play();
         }
     }
 
