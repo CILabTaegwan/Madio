@@ -63,25 +63,16 @@ namespace Mediapipe.Unity.PoseTracking
         }
         public float GetHorizontalMove()
         {
-            if(poseLandmarks == null) return 0.0f;
+            if (poseLandmarks == null) return 0.0f;
 
-            //Debug.Log(poseLandmarks.Landmark[15].X);
 
-            
-            //oneone_position = new Vector3(0, 0, poseLandmarks.Landmark[11].Z);
-            //onethree_position = new Vector3(poseLandmarks.Landmark[13].X, poseLandmarks.Landmark[13].Y, 0);
-           
-            zero_position = new Vector3(poseLandmarks.Landmark[hand_position].X, 0 ,poseLandmarks.Landmark[hand_position].Z);
 
-            //onetwo_position = new Vector3(poseLandmarks.Landmark[12].X,0, 0);
-            //median_position = oneone_position / 2 + onetwo_position / 2;
-            //Vector3 directionA = (onethree_position-oneone_position).normalized;
-            //Vector3 directionB = (onefive_position-onethree_position).normalized;
-            
-            //float angle = Vector3.Angle(tmp_Vector, directionC);
+            zero_position = new Vector3(poseLandmarks.Landmark[hand_position].X, 0, poseLandmarks.Landmark[hand_position].Z);
+
+
             if (frame % 5 == 0)
             {
-                
+
                 Vector3 vec_diff = (zero_position - tmp_Vector);
                 angle_list.Add(vec_diff);
 
@@ -92,11 +83,11 @@ namespace Mediapipe.Unity.PoseTracking
                 {
                     tmp_decision_forward = 1;
                     tmp_decision_backward = 1;
-                    
+
                     foreach (Vector3 angle in angle_list)
                     {
                         Debug.Log(angle[0]);
-                       
+
                         if (Mathf.Abs(angle[2]) < 0.04)
                         {
                             tmp_decision_forward *= 0;
@@ -109,7 +100,7 @@ namespace Mediapipe.Unity.PoseTracking
 
                         if (Mathf.Abs(angle[0]) < 0.005)
                         {
-                            
+
                             tmp_decision_backward *= 0;
                         }
                         else
@@ -118,21 +109,23 @@ namespace Mediapipe.Unity.PoseTracking
                         }
 
                     }
-                    
+
                 }
                 tmp_Vector = zero_position;
 
             }
             frame += 1;
-           
-            if (Mathf.Abs(tmp_decision_forward) >0)
+
+            if (Mathf.Abs(tmp_decision_forward) > 0)
             {
+
                 return +2.0f;
             }
-            else if (Mathf.Abs(tmp_decision_backward) > 0)
-            {
+            else if (Mathf.Abs(tmp_decision_backward) > 0) 
+            { 
                 return -2.0f;
-            }
+            } 
+
             else
             {
                 return 0.0f;

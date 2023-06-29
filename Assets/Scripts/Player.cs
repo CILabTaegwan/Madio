@@ -116,4 +116,12 @@ public class Player : MonoBehaviour
         starpower = false;
     }
 
+    public void Reset()
+    {
+        activeRenderer = smallRenderer;
+
+        smallRenderer.enabled = true;
+        bigRenderer.enabled = false;
+        deathAnimation.enabled = false;
+    }
 }

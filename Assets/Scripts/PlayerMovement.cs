@@ -36,6 +36,9 @@ public class PlayerMovement : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private Vector2 initPos = new Vector2(2, 2);
+    private Vector2 prevPos;
+
     private void Awake()
     {
         stopwatch = Stopwatch.StartNew();
@@ -65,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         if (Microphone.IsRecording(microphoneDevice))
         {
             // Play the recorded audio to analyze the dB levels
-            audioSource.Play();
+            // audioSource.Play();
         }
         else
         {
@@ -73,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         dbBound = GetDBLevel();
+
+        prevPos = initPos;
     }
 
     private void OnEnable()
@@ -96,7 +101,17 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // Debug.Log("dB Level: " + dbLevel);
-        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.Instance.ResetGame();
+            return;
+        }
+
+
+
+
+        if (Time.frameCount % (int)(2f / Time.deltaTime) == 0) prevPos = transform.position;
+
         HorizontalMovement();
 
         grounded = rigidbody.Raycast(Vector2.down);
@@ -105,6 +120,7 @@ public class PlayerMovement : MonoBehaviour
         {
             GroundedMovement();
         }
+
 
         ApplyGravity();
     }
@@ -133,6 +149,11 @@ public class PlayerMovement : MonoBehaviour
             inputAxis = MotionProxy.GetInstance().GetHorizontalMove();
         }
 
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            inputAxis = Input.GetAxis("Horizontal");
+        }
+
         velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, moveSpeed * Time.deltaTime);
 
         // check if running into a wall
@@ -152,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float dbLevel = 0.0f;
 
-        //Debug.Log(stopwatch.ElapsedMilliseconds);
+
         if (stopwatch.ElapsedMilliseconds > 1500)
         {
             dbLevel = GetDBLevel();
@@ -160,6 +181,8 @@ public class PlayerMovement : MonoBehaviour
         }
         // prevent gravity from infinitly building up
         velocity.y = Mathf.Max(velocity.y, 0f);
+
+
         jumping = velocity.y > 0f;
 
         // perform jump
@@ -169,6 +192,11 @@ public class PlayerMovement : MonoBehaviour
             jumping = true;
             yelling = true;
             stopwatch.Restart();
+        }
+        else if (Input.GetButtonDown("Jump"))
+        {
+            velocity.y = jumpForce;
+            jumping = true;
         }
     }
 
@@ -233,5 +261,18 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return highestDBLevel;
+    }
+
+    public void Reset()
+    {
+        Camera.main.transform.position = new Vector3(11.5f, 6.5f, -10f);
+        transform.position = initPos;
+        GetComponent<Player>().Reset();
+    }
+
+    public void Resque()
+    {
+        transform.position = prevPos;
+        GetComponent<Player>().Reset();
     }
 }

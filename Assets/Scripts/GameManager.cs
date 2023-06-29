@@ -10,6 +10,11 @@ public class GameManager : MonoBehaviour
     public int lives { get; private set; }
     public int coins { get; private set; }
 
+    public AudioSource deathSound;
+    public AudioSource clearSound;
+
+    private PlayerMovement player;
+
     private void Awake()
     {
         if (Instance != null) {
@@ -30,6 +35,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 60;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
 
         NewGame();
     }
@@ -38,14 +44,11 @@ public class GameManager : MonoBehaviour
     {
         lives = 3;
         coins = 0;
-
-        LoadLevel(1, 1);
+        player.Reset();
     }
 
     public void GameOver()
     {
-        // TODO: show game over screen
-
         NewGame();
     }
 
@@ -54,7 +57,7 @@ public class GameManager : MonoBehaviour
         this.world = world;
         this.stage = stage;
 
-        // SceneManager.LoadScene($"{world}-{stage}");
+        SceneManager.LoadScene($"{world}-{stage}");
     }
 
     public void NextLevel()
@@ -64,6 +67,11 @@ public class GameManager : MonoBehaviour
 
     public void ResetLevel(float delay)
     {
+        if (deathSound != null)
+        {
+            deathSound.Play();
+        }
+
         Invoke(nameof(ResetLevel), delay);
     }
 
@@ -71,10 +79,27 @@ public class GameManager : MonoBehaviour
     {
         lives--;
 
+        player.gameObject.SetActive(true);
+
         if (lives > 0) {
-            LoadLevel(world, stage);
+            player.Resque();
         } else {
             GameOver();
+        }
+    }
+
+    public void ResetGame()
+    {
+        lives = 3;
+        coins = 0;
+        NewGame();
+    }
+
+    public void OnCleared()
+    {
+        if (clearSound != null)
+        {
+            clearSound.Play();
         }
     }
 
