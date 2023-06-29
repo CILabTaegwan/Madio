@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
     private AudioSource audioSource;
 
-    private Vector2 initPos;
+    private Vector2 initPos = new Vector2(2, 2);
     private Vector2 prevPos;
 
     private void Awake()
@@ -77,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
 
         dbBound = GetDBLevel();
 
-        initPos = transform.position;
         prevPos = initPos;
     }
 
@@ -256,6 +255,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Reset()
     {
+        Camera.main.transform.position = new Vector3(11.5f, 6.5f, -10f);
         transform.position = initPos;
         GetComponent<Player>().Reset();
     }
