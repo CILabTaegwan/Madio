@@ -80,7 +80,6 @@ public class GameManager : MonoBehaviour
             GameOver();
         }
 
-        Debug.Log("Resetlevel");
         if (deathSound != null)
         {
             deathSound.Play();

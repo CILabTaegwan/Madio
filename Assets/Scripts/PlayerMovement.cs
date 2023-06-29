@@ -164,10 +164,7 @@ public class PlayerMovement : MonoBehaviour
         }
         // prevent gravity from infinitly building up
         velocity.y = Mathf.Max(velocity.y, 0f);
-        if (Input.GetKey(KeyCode.Space))
-        {
-            velocity.y = 1.0f;
-        }
+
 
         jumping = velocity.y > 0f;
 
@@ -178,6 +175,11 @@ public class PlayerMovement : MonoBehaviour
             jumping = true;
             yelling = true;
             stopwatch.Restart();
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            velocity.y = 20.0f;
         }
     }
 
