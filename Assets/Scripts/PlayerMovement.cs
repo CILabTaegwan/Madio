@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private float inputAxis;
     
     private Stopwatch stopwatch;
+    private float dbBound;
 
     public float moveSpeed = 8f;
     public float maxJumpHeight = 5f;
@@ -65,7 +66,9 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             // Debug.LogError("Microphone recording failed!");
-        }    
+        }
+
+        dbBound = GetDBLevel();
     }
 
     private void OnEnable()
@@ -150,11 +153,8 @@ public class PlayerMovement : MonoBehaviour
         jumping = velocity.y > 0f;
 
         // perform jump
-        // if (Input.GetButtonDown("Jump"))
-        if (dbLevel > 10.0 && !yelling)
+        if (dbLevel > dbBound + 10.0f && !yelling)
         {
-            // Debug.Log(jumpForce);
-            // velocity.y = jumpForce;
             velocity.y = dbLevel;
             jumping = true;
             yelling = true;
@@ -223,19 +223,5 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return highestDBLevel;
-        
-        // Calculate the RMS value of the audio samples
-        // float rms = 0f;
-        // foreach (float sample in samples)
-        // {
-        //     rms += Mathf.Pow(sample, 2);
-        // }
-        // rms /= samples.Length;
-        // rms = Mathf.Sqrt(rms);
-        //
-        // // Convert RMS value to dB using sensitivity value
-        // float dbLevel = 20f * Mathf.Log10(sensitivity * rms);
-        //
-        // return dbLevel;
     }
 }
