@@ -1,4 +1,5 @@
 using UnityEngine;
+using Mediapipe.Unity.PoseTracking;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -21,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
     public bool running => Mathf.Abs(velocity.x) > 0.25f || Mathf.Abs(inputAxis) > 0.25f;
     public bool sliding => (inputAxis > 0f && velocity.x < 0f) || (inputAxis < 0f && velocity.x > 0f);
     public bool falling => velocity.y < 0f && !grounded;
+
+    public bool UseMotion = true;
 
     private void Awake()
     {
@@ -76,6 +79,12 @@ public class PlayerMovement : MonoBehaviour
     {
         // accelerate / decelerate
         inputAxis = Input.GetAxis("Horizontal");
+
+        if(UseMotion)
+        {
+            inputAxis = MotionProxy.GetInstance().GetHorizontalMove();
+        }
+
         velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, moveSpeed * Time.deltaTime);
 
         // check if running into a wall

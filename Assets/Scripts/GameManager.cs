@@ -13,10 +13,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (Instance != null) {
-            DestroyImmediate(gameObject);
+            // DestroyImmediate(gameObject);
         } else {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         this.world = world;
         this.stage = stage;
 
-        SceneManager.LoadScene($"{world}-{stage}");
+        // SceneManager.LoadScene($"{world}-{stage}");
     }
 
     public void NextLevel()
