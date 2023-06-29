@@ -71,7 +71,7 @@ namespace Mediapipe.Unity.PoseTracking
 
 
 
-            zero_position = new Vector3(poseLandmarks.Landmark[hand_position].X, 0, poseLandmarks.Landmark[hand_position].Z);
+            zero_position = new Vector3(poseLandmarks.Landmark[pose_index].X, 0, poseLandmarks.Landmark[pose_index].Z);
 
 
             if (frame % 4 == 0)
