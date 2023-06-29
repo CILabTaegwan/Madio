@@ -18,7 +18,7 @@ namespace Mediapipe.Unity.PoseTracking
         private int frame = 0;
         private float tmp_decision_backward = 0;
         private float tmp_decision_forward = 0;
-        private int hand_position = 16;
+        private int pose_index = 0;  //default is head
         private List<Vector3> angle_list = new List<Vector3>();
         //private List<float> angle_list = new List<float>(new float[] {});
         public static MotionProxy GetInstance() 
@@ -59,7 +59,11 @@ namespace Mediapipe.Unity.PoseTracking
         }
         public void SetLeftHand()
         {
-            hand_position = 15;
+            pose_index = 15;
+        }
+        public void SetRightHand()
+        {
+            pose_index = 16;
         }
         public float GetHorizontalMove()
         {
@@ -70,7 +74,7 @@ namespace Mediapipe.Unity.PoseTracking
             zero_position = new Vector3(poseLandmarks.Landmark[hand_position].X, 0, poseLandmarks.Landmark[hand_position].Z);
 
 
-            if (frame % 5 == 0)
+            if (frame % 4 == 0)
             {
 
                 Vector3 vec_diff = (zero_position - tmp_Vector);
@@ -86,7 +90,7 @@ namespace Mediapipe.Unity.PoseTracking
 
                     foreach (Vector3 angle in angle_list)
                     {
-                        Debug.Log(angle[0]);
+
 
                         if (Mathf.Abs(angle[2]) < 0.04)
                         {
@@ -98,7 +102,7 @@ namespace Mediapipe.Unity.PoseTracking
                             tmp_decision_forward *= angle[2];
                         }
 
-                        if (Mathf.Abs(angle[0]) < 0.005)
+                        if (Mathf.Abs(angle[0]) < 0.01)
                         {
 
                             tmp_decision_backward *= 0;
@@ -115,13 +119,13 @@ namespace Mediapipe.Unity.PoseTracking
 
             }
             frame += 1;
-
-            if (Mathf.Abs(tmp_decision_forward) > 0)
+            
+            if (Mathf.Abs(tmp_decision_forward) > 0 || Mathf.Abs(tmp_decision_forward) > Mathf.Abs(tmp_decision_backward))
             {
 
                 return +2.0f;
             }
-            else if (Mathf.Abs(tmp_decision_backward) > 0) 
+            else if (Mathf.Abs(tmp_decision_backward) > 0 || Mathf.Abs(tmp_decision_forward) < Mathf.Abs(tmp_decision_backward)) 
             { 
                 return -2.0f;
             } 
