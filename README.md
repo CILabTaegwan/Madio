@@ -15,7 +15,7 @@ Welcome to MotionMario, the revolutionary gaming experience that brings your phy
 1. Open `PoseMario.scene`
 2. Download MediaPipe Unity Plugin [Download](https://github.com/homuler/MediaPipeUnityPlugin/releases/download/v0.12.0/MediaPipeUnity.0.12.0.unitypackage)
 3. Drag and Drop the Unity Editor to install the plugin package 
-4. Add `MotionProxy.GetInstance().SetPoseLandmark(eventArgs.value);` into `OnPoseLandmarksOutput` method
+4. Add `MotionProxy.GetInstance().SetPoseLandmark(eventArgs.value);` into `OnPoseLandmarksOutput` method in `PoseTrackingSolution.cs`
 ```csharp
 private void OnPoseLandmarksOutput(object stream, OutputEventArgs<NormalizedLandmarkList> eventArgs)
 {
