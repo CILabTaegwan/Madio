@@ -133,6 +133,12 @@ public class PlayerMovement : MonoBehaviour
             inputAxis = MotionProxy.GetInstance().GetHorizontalMove();
         }
 
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            inputAxis = Input.GetAxis("Horizontal");
+            Debug.Log(inputAxis);
+        }
+
         velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, moveSpeed * Time.deltaTime);
 
         // check if running into a wall
@@ -152,7 +158,6 @@ public class PlayerMovement : MonoBehaviour
     {
         float dbLevel = 0.0f;
 
-        Debug.Log(stopwatch.ElapsedMilliseconds);
         if (stopwatch.ElapsedMilliseconds > 1500)
         {
             dbLevel = GetDBLevel();

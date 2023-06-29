@@ -50,8 +50,6 @@ namespace Mediapipe.Unity.PoseTracking
         {
             if(poseLandmarks == null) return 0.0f;
 
-            Debug.Log(poseLandmarks.Landmark[15].X);
-
             float pos = poseLandmarks.Landmark[15].X;
 
             if (pos >= 0.6f)
