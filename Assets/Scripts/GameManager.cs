@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public int lives { get; private set; }
     public int coins { get; private set; }
 
+    public AudioSource deathSound;
+
     private void Awake()
     {
         if (Instance != null) {
@@ -64,6 +66,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetLevel(float delay)
     {
+
         Invoke(nameof(ResetLevel), delay);
     }
 
@@ -76,6 +79,15 @@ public class GameManager : MonoBehaviour
         } else {
             GameOver();
         }
+
+        Debug.Log("Resetlevel");
+        if (deathSound != null)
+        {
+            deathSound.Play();
+        }
+
+
+
     }
 
     public void AddCoin()
