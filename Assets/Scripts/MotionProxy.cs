@@ -18,7 +18,7 @@ namespace Mediapipe.Unity.PoseTracking
         private int frame = 0;
         private float tmp_decision_backward = 0;
         private float tmp_decision_forward = 0;
-        private int hand_position = 0;  //default is head
+        private int pose_index = 0;  //default is head
         private List<Vector3> angle_list = new List<Vector3>();
         //private List<float> angle_list = new List<float>(new float[] {});
         public static MotionProxy GetInstance() 
@@ -59,7 +59,11 @@ namespace Mediapipe.Unity.PoseTracking
         }
         public void SetLeftHand()
         {
-            hand_position = 15;
+            pose_index = 15;
+        }
+        public void SetRightHand()
+        {
+            pose_index = 16;
         }
         public float GetHorizontalMove()
         {
