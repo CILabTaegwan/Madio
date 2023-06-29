@@ -58,7 +58,7 @@ namespace Mediapipe.Unity.PoseTracking
             {
                 return -1.0f;
             } 
-            else if(pos <= 0.2f)
+            else if(pos <= 0.4f)
             {
                 return +1.0f;
             }
