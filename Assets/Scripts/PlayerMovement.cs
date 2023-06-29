@@ -136,7 +136,6 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
         {
             inputAxis = Input.GetAxis("Horizontal");
-            Debug.Log(inputAxis);
         }
 
         velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, moveSpeed * Time.deltaTime);
@@ -165,6 +164,11 @@ public class PlayerMovement : MonoBehaviour
         }
         // prevent gravity from infinitly building up
         velocity.y = Mathf.Max(velocity.y, 0f);
+        if (Input.GetKey(KeyCode.Space))
+        {
+            velocity.y = 1.0f;
+        }
+
         jumping = velocity.y > 0f;
 
         // perform jump
