@@ -152,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float dbLevel = 0.0f;
 
-        Debug.Log(stopwatch.ElapsedMilliseconds);
+        //Debug.Log(stopwatch.ElapsedMilliseconds);
         if (stopwatch.ElapsedMilliseconds > 1500)
         {
             dbLevel = GetDBLevel();
