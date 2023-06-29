@@ -5,33 +5,50 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public Player player;
-    public GameManager gameManager;
+    public static UIManager Instance { get; private set; }
 
     public Text livesText;
     public Text coinsText;
-    public Slider decibel;
+    public Slider decibelSlider;
     public RawImage left;
     public RawImage right;
     public RawImage scream;
 
+    private Transform player;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+             DestroyImmediate(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        left = GetComponent<RawImage>();
-        right = GetComponent<RawImage>();
-        scream = GetComponent<RawImage>();
-        decibel = GetComponent<Slider>();
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        player = GameObject.Find("Mario").GetComponent<Player>();
+        player = GameObject.FindWithTag("Player").transform;
+
+        //left = GetComponent<RawImage>();
+        //right = GetComponent<RawImage>();
+        //scream = GetComponent<RawImage>();
+        //decibelSlider = GetComponent<Slider>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        livesText.text = gameManager.lives.ToString();
-        //Debug.Log(gameManager.lives);
-        coinsText.text = gameManager.coins.ToString();
+        livesText.text = GameManager.Instance.lives.ToString();
+        coinsText.text = GameManager.Instance.coins.ToString();
+    }
+
+    public void UpdateDecibelUI(float value, float min, float max)
+    {
+        decibelSlider.value = Mathf.Clamp((value - min) / (max - min), 0f, 1f);
     }
 }

@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     
     private Stopwatch stopwatch;
     private float dbBound;
+    private float dbMaxOffset = 40f;
 
     public float moveSpeed = 8f;
     public float maxJumpHeight = 5f;
@@ -76,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         dbBound = GetDBLevel();
+        dbBound = Mathf.Max(0, dbBound);
 
         prevPos = initPos;
     }
@@ -172,10 +174,11 @@ public class PlayerMovement : MonoBehaviour
     private void GroundedMovement()
     {
         float dbLevel = 0.0f;
-
+        float _dbLevel = GetDBLevel();
+        UIManager.Instance?.UpdateDecibelUI(_dbLevel, dbBound, dbBound + dbMaxOffset);
         if (stopwatch.ElapsedMilliseconds > 1500)
         {
-            dbLevel = GetDBLevel();
+            dbLevel = _dbLevel;
             yelling = false;
         }
         // prevent gravity from infinitly building up
