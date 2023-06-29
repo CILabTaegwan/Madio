@@ -1,5 +1,7 @@
 using UnityEngine;
 using Mediapipe.Unity.PoseTracking;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -10,6 +12,9 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 velocity;
     private float inputAxis;
+    
+    private Stopwatch stopwatch;
+    private float dbBound;
 
     public float moveSpeed = 8f;
     public float maxJumpHeight = 5f;
@@ -19,17 +24,55 @@ public class PlayerMovement : MonoBehaviour
 
     public bool grounded { get; private set; }
     public bool jumping { get; private set; }
+    public bool yelling { get; private set; }
     public bool running => Mathf.Abs(velocity.x) > 0.25f || Mathf.Abs(inputAxis) > 0.25f;
     public bool sliding => (inputAxis > 0f && velocity.x < 0f) || (inputAxis < 0f && velocity.x > 0f);
     public bool falling => velocity.y < 0f && !grounded;
 
     public bool UseMotion = true;
 
+    public string microphoneDevice;
+    public float sensitivity = 100f;
+
+    private AudioSource audioSource;
+
     private void Awake()
     {
+        stopwatch = Stopwatch.StartNew();
         camera = Camera.main;
         rigidbody = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
+        
+        
+        audioSource = gameObject.AddComponent<AudioSource>();
+
+        // Check for available microphone devices
+        if (Microphone.devices.Length > 0)
+        {
+            // Set the microphone device
+            microphoneDevice = Microphone.devices[0];
+        }
+        else
+        {
+            // Debug.LogError("No microphone device found!");
+        }
+
+        // Start recording from the microphone
+        audioSource.clip = Microphone.Start(microphoneDevice, true, 1, AudioSettings.outputSampleRate);
+        audioSource.loop = true;
+
+        // Check if the microphone is recording
+        if (Microphone.IsRecording(microphoneDevice))
+        {
+            // Play the recorded audio to analyze the dB levels
+            audioSource.Play();
+        }
+        else
+        {
+            // Debug.LogError("Microphone recording failed!");
+        }
+
+        dbBound = GetDBLevel();
     }
 
     private void OnEnable()
@@ -38,6 +81,7 @@ public class PlayerMovement : MonoBehaviour
         collider.enabled = true;
         velocity = Vector2.zero;
         jumping = false;
+        yelling = false;
     }
 
     private void OnDisable()
@@ -46,15 +90,19 @@ public class PlayerMovement : MonoBehaviour
         collider.enabled = false;
         velocity = Vector2.zero;
         jumping = false;
+        yelling = false;
     }
 
     private void Update()
     {
+        // Debug.Log("dB Level: " + dbLevel);
+        
         HorizontalMovement();
 
         grounded = rigidbody.Raycast(Vector2.down);
 
-        if (grounded) {
+        if (grounded)
+        {
             GroundedMovement();
         }
 
@@ -102,15 +150,25 @@ public class PlayerMovement : MonoBehaviour
 
     private void GroundedMovement()
     {
+        float dbLevel = 0.0f;
+
+        Debug.Log(stopwatch.ElapsedMilliseconds);
+        if (stopwatch.ElapsedMilliseconds > 1500)
+        {
+            dbLevel = GetDBLevel();
+            yelling = false;
+        }
         // prevent gravity from infinitly building up
         velocity.y = Mathf.Max(velocity.y, 0f);
         jumping = velocity.y > 0f;
 
         // perform jump
-        if (Input.GetButtonDown("Jump"))
+        if (dbLevel > dbBound + 10.0f && !yelling)
         {
-            velocity.y = jumpForce;
+            velocity.y = dbLevel;
             jumping = true;
+            yelling = true;
+            stopwatch.Restart();
         }
     }
 
@@ -145,4 +203,35 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    float GetDBLevel()
+    {
+        // Get a block of audio samples from the microphone
+        float[] samples = new float[audioSource.clip.samples];
+        audioSource.clip.GetData(samples, 0);
+
+        // Calculate the number of samples to consider based on the capture duration
+        int numSamplesToConsider = Mathf.CeilToInt(0.5f * audioSource.clip.frequency);
+
+        // Calculate the starting sample index for the duration
+        int startSampleIndex = samples.Length - numSamplesToConsider;
+
+        // Find the highest dB level among the samples within the duration
+        float highestDBLevel = float.NegativeInfinity;
+        for (int i = startSampleIndex; i < samples.Length; i++)
+        {
+            float sample = samples[i];
+
+            // Calculate the dB level for the current sample
+            float rms = Mathf.Pow(sample, 2);
+            float dbLevel = 20f * Mathf.Log10(sensitivity * Mathf.Sqrt(rms));
+
+            // Update the highest dB level if necessary
+            if (dbLevel > highestDBLevel)
+            {
+                highestDBLevel = dbLevel;
+            }
+        }
+
+        return highestDBLevel;
+    }
 }
