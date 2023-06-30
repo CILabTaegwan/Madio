@@ -33,11 +33,6 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
-
-        //left = GetComponent<RawImage>();
-        //right = GetComponent<RawImage>();
-        //scream = GetComponent<RawImage>();
-        //decibelSlider = GetComponent<Slider>();
     }
 
     // Update is called once per frame
@@ -50,5 +45,6 @@ public class UIManager : MonoBehaviour
     public void UpdateDecibelUI(float value, float min, float max)
     {
         decibelSlider.value = Mathf.Clamp((value - min) / (max - min), 0f, 1f);
+        scream.enabled = decibelSlider.value > 0.2;
     }
 }
