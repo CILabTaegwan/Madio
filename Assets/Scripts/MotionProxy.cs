@@ -102,7 +102,7 @@ namespace Mediapipe.Unity.PoseTracking
                             tmp_decision_forward *= angle[2];
                         }
 
-                        if (Mathf.Abs(angle[0]) < 0.01)
+                        if (Mathf.Abs(angle[0]) < 0.005)
                         {
 
                             tmp_decision_backward *= 0;
@@ -120,7 +120,7 @@ namespace Mediapipe.Unity.PoseTracking
             }
             frame += 1;
             
-            if (Mathf.Abs(tmp_decision_forward) > 0 || Mathf.Abs(tmp_decision_forward) > Mathf.Abs(tmp_decision_backward))
+            if (tmp_decision_forward > 0 || Mathf.Abs(tmp_decision_forward) > Mathf.Abs(tmp_decision_backward))
             {
 
                 return +2.0f;

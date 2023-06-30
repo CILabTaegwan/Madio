@@ -1,15 +1,17 @@
-# MotionMario
-Welcome to MotionMario, the revolutionary gaming experience that brings your physical movements and voice commands into the world of Mario! Get ready to jump, run, and stomp your way to victory using nothing but your body and voice.
+# Madio (Mad + Mario)
+Welcome to Mardio! Get ready for an extraordinary adventure where your voice and body controls the game!
 
 ![ScreenShot](Screenshot/snapshot.png)
 
-## How It Works
+## Instructions
 
-**Motion Controls**: Connect your preferred motion sensor device, such as a Kinect or PlayStation Camera, to your gaming setup. MotionMario uses this technology to track your movements in real-time, allowing you to control Mario's actions by simply moving your body. Run in place to make Mario run, jump to make him jump, and crouch to make him slide!
+**Moving Forward**: Bend forward to make Mario move forward. As if you're bowing in Asian style! 
 
+**Moving Backward**: Bend your upper body left and right to make Mario move backward. It's a good trunk exercise! 
 
-**Voice Commands**: MotionMario takes voice control to the next level. With the help of your microphone, you can activate special abilities and perform moves by speaking commands out loud. Want to make Mario perform a super jump? Just say the magic word! The game recognizes a wide range of voice commands, adding a whole new layer of interactivity and immersion.
+**Jumping**: Let out a loud scream to make Mario jump. The louder your scream, the higher he will jump! 
 
+**Remember**: Bend forward to move ahead, bend left and right to move backward, and scream for impressive jumps!
 
 ## Project Installation
 1. Open `PoseMario.scene`
@@ -26,7 +28,7 @@ private void OnPoseLandmarksOutput(object stream, OutputEventArgs<NormalizedLand
 5. Done!
 
 ## Disclaimer
-The original mario project in this [zigurous/unity-super-mario-tutorial](https://github.com/zigurous/unity-super-mario-tutorial) repository.
+The Super Mario Bros game in this project is oringed by [zigurous/unity-super-mario-tutorial](https://github.com/zigurous/unity-super-mario-tutorial) repository.
 
 
 
